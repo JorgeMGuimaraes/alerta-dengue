@@ -13,7 +13,7 @@ class _ResultadosState extends State<Resultados> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text('Second Route'),
+        title: const Text('Resultados'),
       ),
       body: Center(
         child: ElevatedButton(
