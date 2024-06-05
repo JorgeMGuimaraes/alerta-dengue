@@ -1,6 +1,7 @@
 import 'package:alerta_dengue/helpers/formata_data.dart';
 import 'package:alerta_dengue/models/diseases.dart';
 import 'package:alerta_dengue/models/geocodes.dart';
+import 'package:alerta_dengue/models/dados_request.dart';
 import 'package:alerta_dengue/views/resultados.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +12,14 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  String disease = 'dengue';
-  String geocode = '2800308';
-  String? epidateStart; //yyyy-mm-dd
-  String? epidateEnd; //yyyy-mm-dd
-  String message = '';
+String disease = 'dengue';
+String geocode = '2800308';
+String? epidateStart; //yyyy-mm-dd
+String? epidateEnd; //yyyy-mm-dd
+String message = '';
+DadosRequest dadosRequest = DadosRequest(disease: disease, geocode: geocode);
 
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,19 +93,26 @@ class _HomeState extends State<Home> {
                 epidateEnd = formataData(value);
               },
             ),
-            Text(message,
-            style: const TextStyle(color: Colors.red),
+            Text(
+              message,
+              style: const TextStyle(color: Colors.red),
             ),
             ElevatedButton(
                 onPressed: () {
                   isBuscaValida()
                       ? setState(() {
-                        message = '';
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Resultados()));
-                      })
+                          message = '';
+                          dadosRequest.disease =disease;
+                          dadosRequest.geocode=geocode;
+                          dadosRequest.epidateStart=epidateStart;
+                          dadosRequest.epidateEnd=epidateEnd;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Resultados(
+                                        dadosRequest: dadosRequest,
+                                      )));
+                        })
                       : setState(() {
                           message = 'Preencha as datas corretamente';
                         });
@@ -118,6 +127,4 @@ class _HomeState extends State<Home> {
   bool isBuscaValida() {
     return epidateStart != null && epidateEnd != null;
   }
-
-
 }

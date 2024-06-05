@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:alerta_dengue/models/dados_request.dart';
 
 class Resultados extends StatefulWidget {
-  const Resultados({super.key});
+  const Resultados({super.key, required this.dadosRequest});
+
+  final DadosRequest dadosRequest;
 
   @override
   State<Resultados> createState() => _ResultadosState();
 }
 
 class _ResultadosState extends State<Resultados> {
+  @override
+  void initState() {
+    super.initState();
+    testRequest();
+
+  }
+  
+  void testRequest() {
+    print('resultados');
+    print(widget.dadosRequest.disease);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +33,6 @@ class _ResultadosState extends State<Resultados> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            // Navigate back to the first route when tapped.
             Navigator.pop(context);
           },
           child: const Text('voltar'),
