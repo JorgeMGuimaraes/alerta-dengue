@@ -12,14 +12,13 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-String disease = 'dengue';
-String geocode = '2800308';
-String? epidateStart; //yyyy-mm-dd
-String? epidateEnd; //yyyy-mm-dd
-String message = '';
-DadosRequest dadosRequest = DadosRequest(disease: disease, geocode: geocode);
-
 class _HomeState extends State<Home> {
+  String disease = 'dengue';
+  String geocode = '2800308';
+  String? epidateStart; //yyyy-mm-dd
+  String? epidateEnd; //yyyy-mm-dd
+  String message = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,15 +101,16 @@ class _HomeState extends State<Home> {
                   isBuscaValida()
                       ? setState(() {
                           message = '';
-                          dadosRequest.disease =disease;
-                          dadosRequest.geocode=geocode;
-                          dadosRequest.epidateStart=epidateStart;
-                          dadosRequest.epidateEnd=epidateEnd;
+                          DadosRequest dados = DadosRequest(
+                              disease: disease,
+                              geocode: geocode,
+                              epidateStart: epidateStart,
+                              epidateEnd: epidateEnd);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Resultados(
-                                        dadosRequest: dadosRequest,
+                                        dadosRequest: dados,
                                       )));
                         })
                       : setState(() {
