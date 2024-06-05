@@ -1,3 +1,4 @@
+import 'package:alerta_dengue/helpers/formata_data.dart';
 import 'package:alerta_dengue/models/diseases.dart';
 import 'package:alerta_dengue/models/geocodes.dart';
 import 'package:alerta_dengue/views/resultados.dart';
@@ -13,6 +14,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String disease = 'dengue';
   String geocode = '2800308';
+  String? epidateStart; //yyyy-mm-dd
+  String? epidateEnd; //yyyy-mm-dd
+  String message = '';
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class _HomeState extends State<Home> {
                 );
               }).toList(),
             ),
-                        DropdownButton<String>(
+            DropdownButton<String>(
               value: geocode,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
@@ -69,12 +73,40 @@ class _HomeState extends State<Home> {
                 );
               }).toList(),
             ),
+            TextField(
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Data de Início (dd/mm/aaaa)'),
+              onChanged: (value) {
+                setState(() {
+                  epidateStart = formataData(value);
+                });
+              },
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Data de Fim (dd/mm/aaaa)'),
+              onChanged: (value) {
+                epidateEnd = formataData(value);
+              },
+            ),
+            Text(message,
+            style: const TextStyle(color: Colors.red),
+            ),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Resultados()));
+                  isBuscaValida()
+                      ? setState(() {
+                        message = '';
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Resultados()));
+                      })
+                      : setState(() {
+                          message = 'Preencha as datas corretamente';
+                        });
                 },
                 child: const Text('ir')),
           ],
@@ -82,4 +114,10 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  bool isBuscaValida() {
+    return epidateStart != null && epidateEnd != null;
+  }
+
+
 }
