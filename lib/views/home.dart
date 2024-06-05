@@ -8,10 +8,14 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-const List<String> doencas = <String>['Dengue', 'Chikungunya', 'Zika'];
+final Map<String, String> diseases = {
+  'dengue': 'Dengue',
+  'chikungunya': 'Chikungunya',
+  'zika': 'Zika'
+};
 
 class _HomeState extends State<Home> {
-  String dropdownValue = doencas.first;
+  String dropdownValue = 'dengue';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,10 +42,10 @@ class _HomeState extends State<Home> {
                   dropdownValue = value!;
                 });
               },
-              items: doencas.map<DropdownMenuItem<String>>((String value) {
+              items: diseases.entries.map<DropdownMenuItem<String>>((entry) {
                 return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+                  value: entry.key,
+                  child: Text(entry.value),
                 );
               }).toList(),
             ),
