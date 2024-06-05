@@ -8,8 +8,10 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+const List<String> doencas = <String>['Dengue', 'Chikungunya', 'Zika'];
 
+class _HomeState extends State<Home> {
+  String dropdownValue = doencas.first;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,12 +23,36 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Resultados())
+            DropdownButton<String>(
+              value: dropdownValue,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              underline: Container(
+                height: 2,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              onChanged: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  dropdownValue = value!;
+                });
+              },
+              items: doencas.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
                 );
-            }, child: const Text('ir')),
+              }).toList(),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Resultados()));
+                },
+                child: const Text('ir')),
           ],
         ),
       ),
