@@ -38,49 +38,59 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            DropdownButton<String>(
-              value: disease,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              underline: Container(
-                height: 2,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  disease = value!;
-                });
-              },
-              items: diseases.entries.map<DropdownMenuItem<String>>((entry) {
-                return DropdownMenuItem<String>(
-                  value: entry.key,
-                  child: Text(entry.value),
-                );
-              }).toList(),
+            Row(
+              children: <Widget>[
+                const Text('Selecione uma doença: '),
+                DropdownButton<String>(
+                  value: disease,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  underline: Container(
+                    height: 2,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      disease = value!;
+                    });
+                  },
+                  items: diseases.entries.map<DropdownMenuItem<String>>((entry) {
+                    return DropdownMenuItem<String>(
+                      value: entry.key,
+                      child: Text(entry.value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
-            DropdownButton<String>(
-              value: geocode,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              underline: Container(
-                height: 2,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  geocode = value!;
-                });
-              },
-              items: geocodes.entries.map<DropdownMenuItem<String>>((entry) {
-                return DropdownMenuItem<String>(
-                  value: entry.key,
-                  child: Text(entry.value),
-                );
-              }).toList(),
+            Row(
+              children: <Widget>[
+                const Text('Selecione uma capital: '),
+                DropdownButton<String>(
+                  value: geocode,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  underline: Container(
+                    height: 2,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      geocode = value!;
+                    });
+                  },
+                  items: geocodes.entries.map<DropdownMenuItem<String>>((entry) {
+                    return DropdownMenuItem<String>(
+                      value: entry.key,
+                      child: Text(entry.value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
             TextField(
               decoration: const InputDecoration(
