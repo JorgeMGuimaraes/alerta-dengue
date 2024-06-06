@@ -23,11 +23,9 @@ class _ResultadosState extends State<Resultados> {
     /// https://info.dengue.mat.br/api/alertcity?<PARAMETROS_DA_CONSULTA>
     /// ?geocode=3304557&disease=dengue&format=csv&ew_start=1&ew_end=50&ey_start=2017&ey_end=2017
     const String baseUrl = "https://info.dengue.mat.br/api/alertcity";
-    //String url =
-    //    "$baseUrl?geocode=${dados.geocode}&disease=${dados.disease}&format=json&ew_start=1&ew_end=50&ey_start=2017&ey_end=2017";
-
     String url =
-        "https://info.dengue.mat.br/api/alertcity?geocode=3304557&disease=dengue&format=json&ew_start=1&ew_end=50&ey_start=2017&ey_end=2017";
+        "$baseUrl?geocode=${dados.geocode}&disease=${dados.disease}&format=json&ew_start=${dados.ewStart}&ew_end=${dados.ewEnd}&ey_start=${dados.eyStart}&ey_end=${dados.eyEnd}";
+
     http.Response response = await http.get(Uri.parse(url));
     var jsonResultados = jsonDecode(response.body);
     List<Resultado> ret = [];
@@ -47,6 +45,9 @@ class _ResultadosState extends State<Resultados> {
       ),
       body: Column(
         children: <Widget>[
+          Text(widget.dadosRequest.disease.toUpperCase()),
+          Text('Referente aos dias ${widget.dadosRequest.dataInicio} e ${widget.dadosRequest.dataFim}'),
+          Text('Entre a ${widget.dadosRequest.ewStart}.a semana de ${widget.dadosRequest.eyStart} e a ${widget.dadosRequest.ewEnd}.a semana de ${widget.dadosRequest.eyEnd}'),
           FutureBuilder(
               future: getResultados(widget.dadosRequest),
               builder: (context, snapshot) {
@@ -113,12 +114,6 @@ class _ResultadosState extends State<Resultados> {
                 }
                 return const Text("Erro ao carregar builder");
               }),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('voltar'),
-          )
         ],
       ),
     );
