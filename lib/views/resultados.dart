@@ -46,8 +46,10 @@ class _ResultadosState extends State<Resultados> {
       body: Column(
         children: <Widget>[
           Text(widget.dadosRequest.disease.toUpperCase()),
-          Text('Referente aos dias ${widget.dadosRequest.dataInicio} e ${widget.dadosRequest.dataFim}'),
-          Text('Entre a ${widget.dadosRequest.ewStart}.a semana de ${widget.dadosRequest.eyStart} e a ${widget.dadosRequest.ewEnd}.a semana de ${widget.dadosRequest.eyEnd}'),
+          Text(
+              'Referente aos dias ${widget.dadosRequest.dataInicio} e ${widget.dadosRequest.dataFim}'),
+          Text(
+              'Entre a ${widget.dadosRequest.ewStart}.a semana de ${widget.dadosRequest.eyStart} e a ${widget.dadosRequest.ewEnd}.a semana de ${widget.dadosRequest.eyEnd}'),
           FutureBuilder(
               future: getResultados(widget.dadosRequest),
               builder: (context, snapshot) {
@@ -58,9 +60,9 @@ class _ResultadosState extends State<Resultados> {
                   case ConnectionState.active:
                   case ConnectionState.done:
                     if (snapshot.hasError) {
-                      print("Erro ao carregar: snapshot has error");
-                      print(snapshot.error.toString());
-                      print(snapshot.data.toString());
+                      debugPrint("Erro ao carregar: snapshot has error");
+                      debugPrint(snapshot.error.toString());
+                      debugPrint(snapshot.data.toString());
 
                       break;
                     } else {
@@ -73,39 +75,30 @@ class _ResultadosState extends State<Resultados> {
                             itemBuilder: (context, index) {
                               Resultado resultado = resultados[index];
                               return Card(
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        const Text('Casos: '),
-                                        Text(resultado.casos.toString()),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        const Text('Casos Estimados: '),
-                                        Text(resultado.casosEst.toString()),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        const Text('Nível: '),
-                                        Text(resultado.nivel.toString()),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        const Text('Temperatura Mínima: '),
-                                        Text(resultado.tempmin.toString()),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        const Text('Temperatura Máxima: '),
-                                        Text(resultado.tempmax.toString()),
-                                      ],
-                                    ),
-                                  ],
+                                margin: const EdgeInsets.all(5),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          const Text('Casos: '),
+                                          Text(resultado.casos.toString()),
+                                          const Text(' | Casos Estimados: '),
+                                          Text(resultado.casosEst.toString()),
+                                          Text(' | Nível: ${resultado.nivel.toString()}'),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                              'Temperatura Mínima: ${resultado.tempmin!.toStringAsFixed(2)}'),
+                                          Text(
+                                              ' | Temperatura Máxima: ${resultado.tempmax!.toStringAsFixed(2)}'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
