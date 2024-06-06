@@ -35,111 +35,130 @@ class _HomeState extends State<Home> {
         title: const Text('Alerta Dengue'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            DropdownButton<String>(
-              value: disease,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              underline: Container(
-                height: 2,
-                color: Theme.of(context).colorScheme.primary,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  const Text('Selecione uma doença: '),
+                  DropdownButton<String>(
+                    value: disease,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                    underline: Container(
+                      height: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        disease = value!;
+                      });
+                    },
+                    items: diseases.entries.map<DropdownMenuItem<String>>((entry) {
+                      return DropdownMenuItem<String>(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  disease = value!;
-                });
-              },
-              items: diseases.entries.map<DropdownMenuItem<String>>((entry) {
-                return DropdownMenuItem<String>(
-                  value: entry.key,
-                  child: Text(entry.value),
-                );
-              }).toList(),
-            ),
-            DropdownButton<String>(
-              value: geocode,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              underline: Container(
-                height: 2,
-                color: Theme.of(context).colorScheme.primary,
+              Row(
+                children: <Widget>[
+                  const Text('Selecione uma capital: '),
+                  DropdownButton<String>(
+                    value: geocode,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                    underline: Container(
+                      height: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        geocode = value!;
+                      });
+                    },
+                    items: geocodes.entries.map<DropdownMenuItem<String>>((entry) {
+                      return DropdownMenuItem<String>(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  geocode = value!;
-                });
-              },
-              items: geocodes.entries.map<DropdownMenuItem<String>>((entry) {
-                return DropdownMenuItem<String>(
-                  value: entry.key,
-                  child: Text(entry.value),
-                );
-              }).toList(),
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Data de Início (dd/mm/aaaa)'),
-              onChanged: (value) {
-                setState(() {
-                  if (isDataValida(value)) {
-                    mensagem = '';
-                    dataInicio = value;
-                  } else {
-                    mensagem = 'Favor corrigir data!';
-                    dataInicio = '';
-                  }
-                   
-                });
-              },
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Data de Fim (dd/mm/aaaa)'),
-              onChanged: (value) {
-                  if (isDataValida(value)) {
-                    mensagem = '';
-                    dataFim = value;
-                  } else {
-                    mensagem = 'Favor corrigir data!';
-                    dataFim = '';
-                  }
-              },
-            ),
-            Text(
-              mensagem,
-              style: const TextStyle(color: Colors.red),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  isBuscaValida()
-                      ? setState(() {
-                          mensagem = '';
-                          DadosRequest dados = DadosRequest(
-                              disease: disease,
-                              geocode: geocode,
-                              dataInicio: dataInicio,
-                              dataFim: dataFim);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Resultados(
-                                        dadosRequest: dados,
-                                      )));
-                        })
-                      : setState(() {
-                          mensagem = 'Preencha as datas corretamente';
-                        });
-                },
-                child: const Text('ir')),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Data de Início (dd/mm/aaaa)'),
+                  onChanged: (value) {
+                    setState(() {
+                      if (isDataValida(value)) {
+                        mensagem = '';
+                        dataInicio = value;
+                      } else {
+                        mensagem = 'Favor corrigir data!';
+                        dataInicio = '';
+                      }
+                       
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Data de Fim (dd/mm/aaaa)'),
+                  onChanged: (value) {
+                      if (isDataValida(value)) {
+                        mensagem = '';
+                        dataFim = value;
+                      } else {
+                        mensagem = 'Favor corrigir data!';
+                        dataFim = '';
+                      }
+                  },
+                ),
+              ),
+              Text(
+                mensagem,
+                style: const TextStyle(color: Colors.red),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    isBuscaValida()
+                        ? setState(() {
+                            mensagem = '';
+                            DadosRequest dados = DadosRequest(
+                                disease: disease,
+                                geocode: geocode,
+                                dataInicio: dataInicio,
+                                dataFim: dataFim);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Resultados(
+                                          dadosRequest: dados,
+                                        )));
+                          })
+                        : setState(() {
+                            mensagem = 'Preencha as datas corretamente';
+                          });
+                  },
+                  child: const Text('ir')),
+            ],
+          ),
         ),
       ),
     );
