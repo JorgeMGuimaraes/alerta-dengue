@@ -1,4 +1,4 @@
-import 'package:alerta_dengue/helpers/formata_data.dart';
+import 'package:alerta_dengue/logica/formata_data.dart';
 import 'package:alerta_dengue/models/diseases.dart';
 import 'package:alerta_dengue/models/geocodes.dart';
 import 'package:alerta_dengue/models/dados_request.dart';
