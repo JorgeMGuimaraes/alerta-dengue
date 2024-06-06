@@ -1,6 +1,6 @@
-import 'package:alerta_dengue/helpers/formata_data.dart';
 import 'package:alerta_dengue/models/diseases.dart';
 import 'package:alerta_dengue/models/geocodes.dart';
+import 'package:alerta_dengue/models/dados_request.dart';
 import 'package:alerta_dengue/views/resultados.dart';
 import 'package:flutter/material.dart';
 
@@ -10,13 +10,22 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
-
-class _HomeState extends State<Home> {
   String disease = 'dengue';
   String geocode = '2800308';
-  String? epidateStart; //yyyy-mm-dd
-  String? epidateEnd; //yyyy-mm-dd
-  String message = '';
+  String dataInicio = ''; //yyyy-mm-dd
+  String dataFim = ''; //yyyy-mm-dd
+
+class _HomeState extends State<Home> {
+  String mensagem = '';
+
+  bool isDataValida(String data) {
+    List<String> partes = data.split('/');
+    return data.length == 10 &&
+    partes.length == 3 &&
+    partes[0].length == 2 &&
+    partes[1].length == 2 &&
+    partes[2].length == 4;   
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +88,14 @@ class _HomeState extends State<Home> {
                   labelText: 'Data de Início (dd/mm/aaaa)'),
               onChanged: (value) {
                 setState(() {
-                  epidateStart = formataData(value);
+                  if (isDataValida(value)) {
+                    mensagem = '';
+                    dataInicio = value;
+                  } else {
+                    mensagem = 'Favor corrigir data!';
+                    dataInicio = '';
+                  }
+                   
                 });
               },
             ),
@@ -88,24 +104,38 @@ class _HomeState extends State<Home> {
                   border: OutlineInputBorder(),
                   labelText: 'Data de Fim (dd/mm/aaaa)'),
               onChanged: (value) {
-                epidateEnd = formataData(value);
+                  if (isDataValida(value)) {
+                    mensagem = '';
+                    dataFim = value;
+                  } else {
+                    mensagem = 'Favor corrigir data!';
+                    dataFim = '';
+                  }
               },
             ),
-            Text(message,
-            style: const TextStyle(color: Colors.red),
+            Text(
+              mensagem,
+              style: const TextStyle(color: Colors.red),
             ),
             ElevatedButton(
                 onPressed: () {
                   isBuscaValida()
                       ? setState(() {
-                        message = '';
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Resultados()));
-                      })
+                          mensagem = '';
+                          DadosRequest dados = DadosRequest(
+                              disease: disease,
+                              geocode: geocode,
+                              dataInicio: dataInicio,
+                              dataFim: dataFim);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Resultados(
+                                        dadosRequest: dados,
+                                      )));
+                        })
                       : setState(() {
-                          message = 'Preencha as datas corretamente';
+                          mensagem = 'Preencha as datas corretamente';
                         });
                 },
                 child: const Text('ir')),
@@ -116,8 +146,6 @@ class _HomeState extends State<Home> {
   }
 
   bool isBuscaValida() {
-    return epidateStart != null && epidateEnd != null;
+    return isDataValida(dataInicio) && isDataValida(dataFim);
   }
-
-
 }
